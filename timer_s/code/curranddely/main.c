@@ -7,12 +7,13 @@
 
 //#include <linux/config.h>
 #include <linux/module.h>
+#include <linux/ktime.h>
+#include <linux/timekeeping.h>
 #include <linux/moduleparam.h>
 #include <linux/init.h>
 
 #include <linux/kernel.h>	/* printk() */
 #include <linux/slab.h>		/* kmalloc() */
-#include <linux/fs.h>		/* everything... */
 #include <linux/errno.h>	/* error codes */
 #include <linux/types.h>	/* size_t */
 #include <linux/proc_fs.h>
@@ -22,13 +23,9 @@
 #include <linux/proc_ns.h>  /*proc 在新版中移动到了此目录下*/
 //#include <asm/system.h>		/* cli(), *_flags */
 #include <asm/uaccess.h>	/* copy_*_user */
-
 #include <net/snmp.h>
 #include <linux/ipv6.h>
 #include <net/if_inet6.h>
-
-
-
 #include "scull.h"		/* local definitions */
 
 int scull_major = SCULL_MAJOR;
@@ -57,17 +54,18 @@ enum jit_files {
 
 static void *scull_seq_start(struct seq_file *s, loff_t *pos)
 {
-	
+return NULL;
 }
 
 static void *scull_seq_next(struct seq_file *s, void *v, loff_t *pos)
 {
-	
+return NULL;
 }
 
 static void scull_seq_stop(struct seq_file *s, void *v)
 {
 	/* Actually, there's nothing to do here */
+return ;
 }
 
 
@@ -108,27 +106,28 @@ static void* dely_on(struct seq_file *s, void *v,int flag){
 
 static int scull_seq_show(struct seq_file *s, void *v)
 {
-	struct timeval tv1;
-	struct timespec tv2;
+	// struct timespec tv2;
+	//   printk("scull_seq_show");
+	   seq_printf(s, "My data: ");
+	   return 0;
+	   
 	unsigned long j1;
 	u64 j2;
 
 	/* get them four */
 	j1 = jiffies;
 	j2 = get_jiffies_64();
-	do_gettimeofday(&tv1);
-	tv2 = current_kernel_time();
+	ktime_t  tv1 = ktime_get();
+	// tv2 = current_kernel_time();
 
     
 	dely_on(s,v,JIT_BUSY);
 	
-			
 
- 	seq_printf(s,"0x%08lx 0x%016Lx %10i.%06i\n"
-		       "%40i.%09i\n",
+ 	seq_printf(s,"0x%08lx 0x%016Lx %lld\n",
 		       j1, j2,
-		       (int) tv1.tv_sec, (int) tv1.tv_usec,
-		       (int) tv2.tv_sec, (int) tv2.tv_nsec);
+		       (long long) tv1);
+
 	//*start = buf;
 	return 0;
 }
@@ -166,12 +165,12 @@ static int scull_proc_open(struct inode *inode, struct file *file)
 /*
  * Create a set of file operations for our proc file.
  */
-static struct file_operations scull_proc_ops = {
-	.owner   = THIS_MODULE,
-	.open    = scull_proc_open,
-	.read    = seq_read,
-	.llseek  = seq_lseek,
-	.release = seq_release
+static struct proc_ops scull_proc_ops = {
+	// .owner   = THIS_MODULE,
+	.proc_open    = scull_proc_open,
+	.proc_read    = seq_read,
+	.proc_lseek  = seq_lseek,
+	.proc_release = seq_release
 };
 	
 
@@ -189,9 +188,7 @@ static void scull_create_proc(void)
 
 static void scull_remove_proc(void)
 {
-	
 	remove_proc_entry("currentime", NULL /* parent dir */);
-	
 }
 
 
@@ -228,7 +225,7 @@ int scull_init_module(void)   /*获取主设备号，或者创建设备编号*/
     }
   
     scull_create_proc(); 
-
+ 	printk("scull_init_module");
     return 0;
 
 

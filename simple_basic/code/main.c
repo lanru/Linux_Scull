@@ -346,6 +346,7 @@ fail:
 
 
 
+MODULE_LICENSE("GPL");
 module_init(scull_init_module);
 module_exit(scull_cleanup_module);
 

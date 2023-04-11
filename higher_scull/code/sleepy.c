@@ -62,6 +62,7 @@ void sleepy_cleanup(void)
 	unregister_chrdev(sleepy_major, "sleepy");
 }
 
+MODULE_LICENSE("GPL");
 module_init(sleepy_init);
 module_exit(sleepy_cleanup);
 

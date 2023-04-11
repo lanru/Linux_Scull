@@ -1,8 +1,8 @@
 scull-objs := main.o 
 obj-m := scull.o
 CURRENT_PATH := ${shell pwd}
-CURRENT_KERNEL_PATH := ${shell uname -r}
-LINUX_KERNEL_PATH := /usr/src/kernels/$(CURRENT_KERNEL_PATH)
+CURRENT_KERNEL_PATH := /usr/src/linux-source-5.4.0/linux-source-5.4.0
+LINUX_KERNEL_PATH := /root/linux-5.10.106
 
 all:
 	make -C $(LINUX_KERNEL_PATH) M=$(CURRENT_PATH) modules

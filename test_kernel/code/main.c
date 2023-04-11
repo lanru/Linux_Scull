@@ -365,12 +365,12 @@ static int scull_proc_open(struct inode *inode, struct file *file)
 /*
  * Create a set of file operations for our proc file.
  */
-static struct file_operations scull_proc_ops = {
-	.owner   = THIS_MODULE,
-	.open    = scull_proc_open,
-	.read    = seq_read,
-	.llseek  = seq_lseek,
-	.release = seq_release
+static struct  proc_ops scull_proc_ops = {
+	// .owner   = THIS_MODULE,
+	.proc_open    = scull_proc_open,
+	.proc_read    = seq_read,
+	.proc_lseek  = seq_lseek,
+	.proc_release = seq_release
 };
 	
 

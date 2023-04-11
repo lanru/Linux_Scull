@@ -9,6 +9,8 @@
 #include <linux/kernel.h>
 #include <linux/interrupt.h>
 #include <linux/delay.h>
+#include <linux/irq.h>
+#include <linux/irqdesc.h>
 
 
 static int irq = 27;  
@@ -16,7 +18,7 @@ const char *interface = "my_irq";
 static irqreturn_t myirq_handler(int irq,void *dev);  
    
 
-static void tasklet_func(unsigned long value)
+static void tasklet_func(struct tasklet_struct *t)
 
 {
 	int i  = 0;
@@ -27,7 +29,7 @@ static void tasklet_func(unsigned long value)
 
 }
 
-DECLARE_TASKLET(my_tasklet,&tasklet_func,0);
+DECLARE_TASKLET(my_tasklet,&tasklet_func);
 static int __init myirq_init(void)  {  
  
         if(request_irq(irq,myirq_handler,IRQF_SHARED,interface,&irq)){  
@@ -35,6 +37,8 @@ static int __init myirq_init(void)  {
             return -EIO;  
         }  
         printk("%s request %d IRQ\n",interface,irq);  
+       // raise_softirq(irq);
+        generic_handle_irq(irq);
         return 0;  
 }  
 
@@ -67,5 +71,6 @@ static void  __exit myirq_exit(void){
 
 
 module_init(myirq_init);
+MODULE_LICENSE("GPL");
 
 module_exit(myirq_exit);

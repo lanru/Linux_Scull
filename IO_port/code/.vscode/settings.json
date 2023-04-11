@@ -1,0 +1,17 @@
+{
+    "files.associations": {
+        "snmp.h": "c",
+        "ipv6.h": "c",
+        "time.h": "c",
+        "timer.h": "c",
+        "proc_fs.h": "c",
+        "fs.h": "c",
+        "ktime.h": "c",
+        "types.h": "c",
+        "errno.h": "c",
+        "linkage.h": "c",
+        "if_inet6.h": "c",
+        "cache.h": "c",
+        "bug.h": "c"
+    }
+}

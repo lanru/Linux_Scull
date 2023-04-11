@@ -18,13 +18,13 @@ struct timer_list mytimer;
 
  
 
-static void myfunc(unsigned long data)
+static void myfunc(struct timer_list *timer)
 
 {
 
-        printk("%s/n", (char *)data);
+        printk("my_timer_callback called\n");
 
-        mod_timer(&mytimer, jiffies +HZ);
+       mod_timer(&mytimer, jiffies + msecs_to_jiffies(1000));
 
 }
 
@@ -34,7 +34,7 @@ static int __init mytimer_init(void)
 
 {
 
-        setup_timer(&mytimer, myfunc, (unsigned long)"Hello, world!");
+        timer_setup(&mytimer, myfunc, (long unsigned int)"Hello, world!");
 
         mytimer.expires = jiffies + 10;
 

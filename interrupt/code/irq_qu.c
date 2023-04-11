@@ -8,6 +8,8 @@
 #include<linux/module.h>  
 #include<linux/kernel.h>  
 #include<linux/interrupt.h>  
+#include<linux/irq.h>  
+#include<linux/irqdesc.h>  
    
 MODULE_LICENSE("GPL");  
 
@@ -22,6 +24,7 @@ static int __init myirq_init(void)  {
             return -EIO;  
         }  
         printk("%s request %d IRQ\n",interface,irq);  
+        generic_handle_irq(irq);
         return 0;  
 }  
 
